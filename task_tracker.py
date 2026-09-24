@@ -23,7 +23,7 @@ def find_task(tasks: list, task_id: int):
         if task["id"] == task_id:
             return task
 
-    print(f"Задача с ID {task_id} не найдена")
+    print(f"Error: Task with ID {task_id} not found.")
     sys.exit(1)
 
 
@@ -41,7 +41,7 @@ def add_task(title: str):
 
     tasks.append(new_task)
     save_tasks(tasks)
-    print(f"✅ Задача успешно добавлена с ID {task_id}!")
+    print(f"Task added successfully (ID: {task_id})")
 
 
 def update_task(task_id: int, title: str):
@@ -53,7 +53,7 @@ def update_task(task_id: int, title: str):
 
     save_tasks(tasks)
 
-    print(f"✅ Задача успешно обновлена с ID {task_id}!")
+    print(f"Task with ID {task_id} updated successfully.")
     return
 
 
@@ -66,16 +66,16 @@ def delete_task(task_id: int):
 
             save_tasks(tasks)
 
-            print(f"✅ Задача успешно удалена с ID {task_id}!")
+            print(f"Task with ID {task_id} deleted successfully.")
             return
 
-    print(f"Задача с ID {task_id} не найдена")
+    print(f"Error: Task with ID {task_id} not found.")
     sys.exit(1)
 
 
 def mark_task(task_id: int, status: str):
     if status not in ["todo", "in-progress", "done"]:
-        print(f"Статус {status} некорректный (допустимые значения [in-progress, done])")
+        print(f"Error: Status '{status}' is incorrect. Valid values are: [todo, in-progress, done]")
         sys.exit(1)
 
     tasks = load_tasks()
@@ -85,7 +85,7 @@ def mark_task(task_id: int, status: str):
 
     save_tasks(tasks)
 
-    print(f"Статус задачи с ID {task_id} обновлен до {status}")
+    print(f"Task with ID {task_id} marked as '{status}'.")
     return
 
 
@@ -107,66 +107,63 @@ def main():
     args = sys.argv[1:]
 
     if not args:
-        print("Ошибка: не указана команда.")
+        print("Error: No command specified.")
         sys.exit(1)
 
     command = args[0]
 
     if command == "add":
         if len(args) < 2:
-            print("Ошибка: не указано название задачи.")
+            print("Error: Task description is required.")
             sys.exit(1)
 
         title = args[1]
-
         add_task(str(title))
 
     if command == "update":
         if len(args) < 3:
-            print("Ошибка: не указаны параметры (ID, title).")
+            print("Error: Missing parameters. Usage: update [ID] [description]")
             sys.exit(1)
 
         task_id = args[1]
 
         if not task_id.isdigit():
-            print("Ошибка: ID задачи должен быть числом.")
+            print("Error: Task ID must be a number.")
             sys.exit(1)
 
         title = args[2]
-
         update_task(int(task_id), str(title))
 
     if command == "delete":
         if len(args) < 2:
-            print("Ошибка: не указан ID задачи для удаления.")
+            print("Error: Task ID is required for deletion.")
             sys.exit(1)
 
         task_id = args[1]
         if not task_id.isdigit():
-            print("Ошибка: ID задачи должен быть числом.")
+            print("Error: Task ID must be a number.")
             sys.exit(1)
 
         delete_task(int(task_id))
 
     if command == "mark":
         if len(args) < 3:
-            print("Ошибка: не указан ID задачи для удаления.")
+            print("Error: Missing parameters. Usage: mark [ID] [status]")
             sys.exit(1)
 
         task_id = args[1]
         if not task_id.isdigit():
-            print("Ошибка: ID задачи должен быть числом.")
+            print("Error: Task ID must be a number.")
             sys.exit(1)
 
         status = args[2]
-
         mark_task(int(task_id), str(status))
 
     if command == "list":
         if len(args) >= 2:
             status = args[1]
             if status not in ["todo", "in-progress", "done"]:
-                print(f"Ошибка: некорректный статус '{status}'. Допустимые: todo, in-progress, done")
+                print(f"Error: Invalid status '{status}'. Valid statuses are: todo, in-progress, done")
                 sys.exit(1)
         else:
             status = None
@@ -176,4 +173,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
